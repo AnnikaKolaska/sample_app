@@ -12,7 +12,14 @@ class ActiveSupport::TestCase
   fixtures :all
   include ApplicationHelper
   include StaticPagesHelper
+  # we could actually just include the Sessions helper and use logged_in? directly, 
+  # but this technique would fail in Chapter 9 due to details of how cookies are handled in tests
   
-
-  # Add more helper methods to be used by all tests here...
+  # Add more helper methods to be used by all tests here... 
+  
+  # Returns true if ANY test user is logged in.
+  def is_logged_in?
+    !session[:user_id].nil?
+  end
+  
 end

@@ -25,6 +25,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     end
     follow_redirect!
     assert_template 'users/show'
+    assert is_logged_in?      #Because helper methods aren’t available (by default) in tests, we can’t use the current_user
     assert_not flash.empty?
   end
   
