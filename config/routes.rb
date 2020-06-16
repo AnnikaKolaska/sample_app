@@ -12,5 +12,5 @@ Rails.application.routes.draw do
   delete  '/logout',  to: 'sessions#destroy'
   resources :users    # needs show action at least
   #For Resources I need to look onto the RESTfull Routes Table to see all generated routes!
-  
+  resources :account_activations, only: [:edit]
 end
