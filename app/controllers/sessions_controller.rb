@@ -10,12 +10,14 @@ class SessionsController < ApplicationController
     # user as instancevariable = we can access remember token in tests
     @user = User.find_by(email: posted_user_email)  #returns true if the user exists
     if @user &. authenticate(posted_user_password)
+      forwarding_url = session[:forwarding_url]
       reset_session   # keeps an attacker from being able to share the session
       log_in @user
       # before: remember user
       params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
-      session[:session_token] = user.session_token
-      redirect_to @user # somehow automatically knows that we want a redirection to the users profile page/ user_url(user)
+      session[:session_token] = @user.session_token
+      
+      redirect_to  forwarding_url || @user # somehow automatically knows that we want a redirection to the users profile page/ user_url(user)
     else
       flash.now[:danger] = "Invalid email/password combination"
       render 'new'

@@ -1,6 +1,5 @@
 class User < ApplicationRecord
-  # no attributes here. In database we have name, email, created_at, updated_at and password_digest
-  # HOW would somebody know that a User-object also has for example a password attribute?
+  
   attr_accessor :remember_token
   
   before_save { email.downcase! }
@@ -10,8 +9,9 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 255 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
-  has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }
+  has_secure_password # includes a separate presence validation that specifically catches nil passwords.
+  # allow_nil: true, to allow updating profile without having to put in password. 
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true 
   
   # Returns the hash digest of any given string. (This is a class-method)
   def User.digest(string)

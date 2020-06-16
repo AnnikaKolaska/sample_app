@@ -13,7 +13,7 @@ class ActiveSupport::TestCase
   include ApplicationHelper
   include StaticPagesHelper
   # we could actually just include the Sessions helper and use logged_in? directly, 
-  # but this technique would fail in Chapter 9 due to details of how cookies are handled in tests
+  # but this technique would fail in Chapter 9 due to details of how cookies are handled in tests.
   
   # Add more helper methods to be used by all tests here... 
   
@@ -34,7 +34,7 @@ class ActionDispatch::IntegrationTest
   # Log in as a particular user.
   def log_in_as(user, password: 'password', remember_me: '1')
     post login_path, params: { session: { email: user.email,
-    password: password,
-    remember_me: remember_me } }
+                                          password: password,
+                                          remember_me: remember_me } }
   end
 end
