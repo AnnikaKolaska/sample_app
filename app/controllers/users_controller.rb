@@ -11,7 +11,7 @@ class UsersController < ApplicationController
   
   def show  # user profile-page
     @user = User.find(params[:id])   
-    redirect_to root_url and return unless @user.activated?
+    redirect_to root_url and return unless @user.activated? # not explained why we use return here, why not omit it?
   end
   
   def create

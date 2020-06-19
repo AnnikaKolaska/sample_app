@@ -1,0 +1,17 @@
+<% provide(:title, "Password Reset") %> 
+<h1>Password Reset</h1>
+<div class="row"> 
+  <div class="col-md-6 col-md-offset-3"> 
+  <!--using :password_reset because @password_reset doesn't correspond to an Active Record object, form_for won't automatically create a URL for it.-->
+    <!--https://apidock.com/rails/ActionView/Helpers/FormHelper/form_with-->
+    <!--Adding a scope prefixes the input field names (necessary if no model) The parameters in the forms are accessible 
+    in controllers according to their name nesting. So inputs named title and post[title] are accessible as params[:title] and params[:post][:title] respectively.-->
+    <%= form_with(url: password_resets_path, scope: :password_reset, local: true) do |f| %> 
+      
+      <%= f.label :email %> 
+      <%= f.email_field :email, class: 'form-control' %>
+      
+      <%= f.submit "Submit", class: "btn btn-primary" %> 
+    <% end %>
+  </div> 
+</div>

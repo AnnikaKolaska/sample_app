@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   
-  attr_accessor :remember_token, :activation_token
+  attr_accessor :remember_token, :activation_token, :reset_token
   
   before_create :create_activation_digest # Rails looks for a method called create_activation_digest
   before_save :downcase_email
@@ -58,7 +58,7 @@ class User < ApplicationRecord
     update_attribute(:remember_digest, nil)
   end
   
-  #Activates an account.
+  # Activates an account.
   def activate
     update_columns(activated: true, activated_at: Time.zone.now)
   end
@@ -68,6 +68,20 @@ class User < ApplicationRecord
     UserMailer.account_activation(self).deliver_now
   end
   
+  # Sets the password reset attributes.
+  def create_reset_digest
+    self.reset_token = User.new_token
+    reset_digest = User.digest(reset_token)
+    update_columns(reset_digest: reset_digest, reset_send_at: Time.zone.now)
+  end
+    
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
+  end
+
+  def password_reset_expired?
+    reset_send_at < 2.hours.ago
+  end
 
   private   
     
@@ -80,5 +94,7 @@ class User < ApplicationRecord
     def create_activation_digest
       self.activation_token = User.new_token
       self.activation_digest = User.digest(activation_token)
+      # I dont remember anymore why here Im not supposed to save it to the database
+      # seems wrong. Maybe wrong in the tutorial?
     end
 end

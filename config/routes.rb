@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  
-  
+
   root 'static_pages#home'
   
   get     '/help',    to: 'static_pages#help'
@@ -13,4 +12,5 @@ Rails.application.routes.draw do
   resources :users    # needs show action at least
   #For Resources I need to look onto the RESTfull Routes Table to see all generated routes!
   resources :account_activations, only: [:edit]
+  resources :password_resets,     only: [:new, :create, :edit, :update]
 end
