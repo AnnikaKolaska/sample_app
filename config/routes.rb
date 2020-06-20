@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   #For Resources I need to look onto the RESTfull Routes Table to see all generated routes!
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
+  resources :microposts,          only: [:create, :destroy]
 end

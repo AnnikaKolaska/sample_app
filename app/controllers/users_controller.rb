@@ -11,7 +11,9 @@ class UsersController < ApplicationController
   
   def show  # user profile-page
     @user = User.find(params[:id])   
-    redirect_to root_url and return unless @user.activated? # not explained why we use return here, why not omit it?
+    @microposts = @user.microposts.paginate(page: params[:page]) 
+    redirect_to root_url and return unless @user.activated? # not explained why we use return here, 
+    # why not omit it? return just throws you out of a method.
   end
   
   def create
@@ -61,16 +63,6 @@ class UsersController < ApplicationController
     
     
     # Before filters
-    
-    # Confirms a logged-in user or stores the requested url for
-    # friendly redirection after logging in.
-    def logged_in_user
-      unless logged_in?
-        store_location
-        flash[:danger] = "Please log in."
-        redirect_to login_url
-      end
-    end
     
     # Confirms the correct user.
     def correct_user

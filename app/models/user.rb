@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :microposts, dependent: :destroy
   
   attr_accessor :remember_token, :activation_token, :reset_token
   
@@ -83,6 +84,13 @@ class User < ApplicationRecord
     reset_send_at < 2.hours.ago
   end
 
+
+  # Defines a proto-feed.   
+  def feed
+    Micropost.where("user_id = ?", id)    #https://guides.rubyonrails.org/active_record_querying.html
+    # always escape variables injected into SQL statements!
+  end
+  
   private   
     
     # Converts email to all lower-case.
