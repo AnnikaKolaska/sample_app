@@ -19,7 +19,16 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
     @user.microposts.paginate(page: 1).each do |mipo|
       assert_match mipo.content, response.body
     end
-    
+  end
+  
+  test "test profile stats on home page" do
+    log_in_as(@user)
+    #get root_path(@user) in exercisesolution
+    get root_path
+    assert_template 'static_pages/home'
+    assert_select 'div.stats', count: 1
+    assert_match  @user.following.count.to_s, response.body
+    assert_match  @user.followers.count.to_s, response.body
   end
   
 end

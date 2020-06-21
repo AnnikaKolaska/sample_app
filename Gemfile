@@ -33,7 +33,9 @@ gem 'turbolinks',     '5.2.1'
 gem 'jbuilder',       '2.10.0'
 
 gem 'bootsnap',       '1.4.6', require: false
-
+# Missing helper file helpers/relationships_helper.rb (AbstractController::Helpers::MissingHelperError)
+# commenting out of the "require" and bundle install helped. 
+# even after commenting it back in and bundle install again ?!?!?!
 
 
 group :development, :test do
