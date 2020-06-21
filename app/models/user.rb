@@ -98,11 +98,14 @@ class User < ApplicationRecord
   def feed
     # Micropost.where("user_id IN (?) OR user_id = ? ", self.following.map(&:id), self.id )
     # Micropost.where("user_id IN (?) OR user_id = ? ", self.following_ids, self.id )
-    following_ids_subselect = "SELECT followed_id FROM relationships 
+     following_ids_subselect = "SELECT followed_id FROM relationships 
                                WHERE follower_id = :user_id"
-    Micropost.where("user_id IN (#{following_ids_subselect})
+     Micropost.where("user_id IN (#{following_ids_subselect})
                      OR user_id = :user_id", user_id: self.id)
     # always escape variables injected into SQL statements!
+    
+    # part_of_feed = "relationships.follower_id = :id or microposts.user_id = :id"
+    # Micropost.joins(user: :followers).where(part_of_feed, { id: id })
   end
   
   # Follows a user.
