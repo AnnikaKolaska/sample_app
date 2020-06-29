@@ -45,7 +45,7 @@ class User < ApplicationRecord
     # this method bypasses the validations, which is necessary in this case because we don’t have access to the user’s password.
     update_attribute(:remember_digest, hashed_token )
     # now this method returns the hashed remember token
-    # instead of the result of update_attribute (how the f is this not breaking anything?)
+    # instead of the result of update_attribute.
     remember_digest
   end
   
@@ -57,6 +57,7 @@ class User < ApplicationRecord
   
   # Returns true if the given token matches the digest, otherwise false.
   # attribute should be something like :remember, or :activation
+  # better name valid_token?
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest")
     return false if digest.nil?
@@ -68,14 +69,8 @@ class User < ApplicationRecord
     update_attribute(:remember_digest, nil)
   end
   
-  # Activates an account.
-  def activate
-    update_columns(activated: true, activated_at: Time.zone.now)
-  end
-
-  # Sends activation email.
-  def send_activation_email
-    UserMailer.account_activation(self).deliver_now
+  def validate_reset(id)
+    self.activated? && self.authenticated?(:reset, id)
   end
   
   # Sets the password reset attributes.
@@ -92,7 +87,6 @@ class User < ApplicationRecord
   def password_reset_expired?
     reset_send_at < 2.hours.ago
   end
-
 
   # Returns a user's status feed   
   def feed
@@ -136,7 +130,5 @@ class User < ApplicationRecord
     def create_activation_digest
       self.activation_token = User.new_token
       self.activation_digest = User.digest(activation_token)
-      # I dont remember anymore why here Im not supposed to save it to the database
-      # seems wrong. Maybe wrong in the tutorial?
     end
 end

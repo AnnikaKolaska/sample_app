@@ -16,7 +16,7 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
   end
   
-    test "email should be present" do
+  test "email should be present" do
     @user.email = "       "
     assert_not @user.valid?
   end
@@ -112,7 +112,7 @@ class UserTest < ActiveSupport::TestCase
     archer.microposts.each do |post_unfollowed|
       assert_not michael.feed.include?(post_unfollowed)
     end
-end
+  end
   
   
 end

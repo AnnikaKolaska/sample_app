@@ -13,14 +13,13 @@ class UsersController < ApplicationController
   def show  # user profile-page
     @user = User.find(params[:id])   
     @microposts = @user.microposts.paginate(page: params[:page]) 
-    redirect_to root_url and return unless @user.activated? # not explained why we use return here, 
-    # why not omit it? return just throws you out of a method.
+    redirect_to root_url and return unless @user.activated?
   end
   
   def create
     @user = User.new(user_params)
     if @user.save
-      @user.send_activation_email
+      UserMailer.account_activation(@user).deliver_now
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url 
     else
